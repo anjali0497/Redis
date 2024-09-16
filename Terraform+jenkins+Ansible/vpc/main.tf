@@ -1,4 +1,4 @@
-# VPC
+ # Created  VPC
 resource "aws_vpc" "Redis-VPC" {
   cidr_block = var.vpc-cidr
 

@@ -1,3 +1,4 @@
+# Created vpc module
 module "vpc" {
   source = "./vpc"
   vpc-cidr = var.vpc-cidr

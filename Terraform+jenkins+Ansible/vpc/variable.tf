@@ -5,7 +5,6 @@ variable "vpc-cidr" {
 variable "nat-gat-id" {
     type = string
 }
-
 variable "pri-rt-cidr" {
     type = string
     default = "0.0.0.0/0"

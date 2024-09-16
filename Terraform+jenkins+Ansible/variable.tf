@@ -4,7 +4,7 @@ variable "vpc-cidr" {
 }
 
 
-/*variable "db-name" {
+variable "db-name" {
   type = string
   default = "terraform-state-lock"
-}*/
+}

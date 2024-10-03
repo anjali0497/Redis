@@ -1,0 +1,8 @@
+---
+# handlers file for redis
+
+- name: Restart Redis
+  service:
+    name: redis-server
+    state: restarted
+

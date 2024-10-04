@@ -52,6 +52,15 @@ resource "aws_security_group" "public-SG" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  ingress {
+    from_port   = -1               
+    to_port     = -1               
+    protocol    = "icmp"
+    cidr_blocks = []                
+    security_groups = [data.aws_security_group.default_vpc_sg.id] 
+    ipv6_cidr_blocks = []
+  }
+
   tags = {
     Name = "public-sg"
   }
@@ -66,6 +75,23 @@ resource "aws_security_group" "private-SG" {
     to_port     = 6379
     protocol    = "tcp"
     cidr_blocks = ["10.0.1.0/24"]  # Adjust CIDR blocks as needed
+  }
+
+  ingress {
+    description      = "Allow SSH"
+    from_port        = 22
+    to_port          = 22
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]  # Allows SSH access from anywhere
+  }
+
+  ingress {
+    from_port   = -1               
+    to_port     = -1               
+    protocol    = "icmp"
+    cidr_blocks = []                
+    security_groups = [data.aws_security_group.default_vpc_sg.id] 
+    ipv6_cidr_blocks = []
   }
 
   egress {

@@ -1,18 +1,25 @@
+# Get the default VPC
 data "aws_vpc" "default" {
   default = true
 }
 
+# Declare a variable for VPC CIDR
+variable "vpc_cidr" {
+  description = "The CIDR block of the custom VPC"
+  type        = string
+}
 
+# Default VPC Security Group
 resource "aws_security_group" "default_vpc_sg" {
   vpc_id = data.aws_vpc.default.id
   name   = "default-vpc-sg"
   
   # Allow inbound traffic from the custom VPC
   ingress {
-    from_port   = 22         # SSH, change as per your requirement
+    from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = [var.vpc-cidr]
+    cidr_blocks = [var.vpc_cidr]   # Corrected variable reference for VPC CIDR
   }
 
   # Allow all outbound traffic (optional)
@@ -24,40 +31,39 @@ resource "aws_security_group" "default_vpc_sg" {
   }
 }
 
-
-
-
 # Public Security Group
 resource "aws_security_group" "public-SG" {
-  vpc_id = var.vpc-id
+  vpc_id = var.vpc_id   # Corrected to use 'var.vpc_id'
 
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = [data.aws_vpc.default.cidr_block]
+    cidr_blocks = ["0.0.0.0/0"]   # Allow all outbound traffic
   }
 
+  # Ingress rule for SSH (port 22)
   ingress {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]  
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
-    ingress {
+  # Ingress rule for HTTP (port 80)
+  ingress {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  # Ingress rule for ICMP (ping) from the default VPC security group
   ingress {
-    from_port   = -1               
-    to_port     = -1               
-    protocol    = "icmp"
-    cidr_blocks = []                
-    security_groups = [data.aws_security_group.default_vpc_sg.id] 
+    from_port        = -1                # ICMP type (all types)
+    to_port          = -1                # ICMP code (all codes)
+    protocol         = "icmp"
+    security_groups  = [aws_security_group.default_vpc_sg.id]  # Reference to the resource
     ipv6_cidr_blocks = []
   }
 
@@ -68,36 +74,38 @@ resource "aws_security_group" "public-SG" {
 
 # Private Security Group
 resource "aws_security_group" "private-SG" {
-  vpc_id = var.vpc-id
+  vpc_id = var.vpc_id   # Corrected to use 'var.vpc_id'
 
+  # Ingress rule for Redis (port 6379)
   ingress {
     from_port   = 6379
     to_port     = 6379
     protocol    = "tcp"
-    cidr_blocks = ["10.0.1.0/24"]  # Adjust CIDR blocks as needed
+    cidr_blocks = ["10.0.1.0/24"]  # Custom CIDR block
   }
 
+  # Ingress rule for SSH (port 22)
   ingress {
-    description      = "Allow SSH"
-    from_port        = 22
-    to_port          = 22
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]  # Allows SSH access from anywhere
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
+  # Ingress rule for ICMP (ping) from the default VPC security group
   ingress {
-    from_port   = -1               
-    to_port     = -1               
-    protocol    = "icmp"
-    cidr_blocks = []                
-    security_groups = [data.aws_security_group.default_vpc_sg.id] 
+    from_port        = -1                # ICMP type (all types)
+    to_port          = -1                # ICMP code (all codes)
+    protocol         = "icmp"
+    security_groups  = [aws_security_group.default_vpc_sg.id]  # Reference to the resource
     ipv6_cidr_blocks = []
   }
 
+  # Allow all outbound traffic
   egress {
     from_port   = 0
     to_port     = 0
-    protocol    = "-1"
+    protocol    = "-1"        # All protocols
     cidr_blocks = ["0.0.0.0/0"]
   }
 

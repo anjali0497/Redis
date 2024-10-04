@@ -2,7 +2,7 @@
 
 # VPC
 resource "aws_vpc" "Redis-VPC" {
-  cidr_block = var.vpc-cidr
+  cidr_block = var.vpc_cidr
   enable_dns_support   = true
   enable_dns_hostnames = true
   tags = {

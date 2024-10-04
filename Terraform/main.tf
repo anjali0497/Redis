@@ -1,6 +1,6 @@
 module "vpc" {
   source = "./vpc"
-  vpc-cidr = var.vpc-cidr
+  vpc_cidr = var.vpc_cidr
   nat-gat-id = module.subnet.nat-gat-id
   pri-sub2-id = module.subnet.pri-sub-2-id
   pri-sub1-id = module.subnet.pri-sub-1-id
@@ -13,13 +13,13 @@ module "vpc" {
 module "subnet" {
   source = "./subnets"
   vpc_id = module.vpc.vpc_id
-  vpc-cidr = module.vpc.vpc-cidr
+  vpc-cidr = module.vpc.vpc_cidr
 }
 
 module "security_groups" {
   source = "./security-group"
-  vpc-id = module.vpc.vpc_id
-  vpc-cidr = module.vpc.vpc-cidr
+  vpc_id = module.vpc.vpc_id
+  vpc_cidr = module.vpc.vpc_cidr
 }
 
 module "instance" {
@@ -34,5 +34,5 @@ module "instance" {
 module "peering" {
   source = "./vpc-peering"
   vpc_id = module.vpc.vpc_id
-  vpc-cidr = module.vpc.vpc-cidr
+  vpc-cidr = module.vpc.vpc_cidr
 }

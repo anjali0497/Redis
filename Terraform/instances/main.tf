@@ -1,3 +1,7 @@
+data "aws_ssm_parameter" "ssh_public_key" {
+  name = "/ec2/ssh/public-key"
+}
+
 # Public EC2 Instance
 resource "aws_instance" "Redis-public" {
   ami           = var.ami-id
@@ -7,6 +11,19 @@ resource "aws_instance" "Redis-public" {
   security_groups = [var.public-sg-id]
   key_name = var.key-name
 
+  user_data = <<-EOF
+              #!/bin/bash
+              mkdir -p /home/ubuntu/.ssh
+              echo "${data.aws_ssm_parameter.ssh_public_key.value}" >> /home/ubuntu/.ssh/authorized_keys && \
+              chmod 700 /home/ubuntu/.ssh && \
+              chmod 600 /home/ubuntu/.ssh/authorized_keys && \
+              chown -R ubuntu:ubuntu /home/ubuntu/.ssh
+              EOF
+
+  tags = {
+    Name = "Redis-public"
+  }
+}
   tags = {
     Name = "Redis-public"
   }

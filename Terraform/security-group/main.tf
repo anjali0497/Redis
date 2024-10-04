@@ -3,12 +3,6 @@ data "aws_vpc" "default" {
   default = true
 }
 
-# Declare a variable for VPC CIDR
-variable "vpc_cidr" {
-  description = "The CIDR block of the custom VPC"
-  type        = string
-}
-
 # Default VPC Security Group
 resource "aws_security_group" "default_vpc_sg" {
   vpc_id = data.aws_vpc.default.id

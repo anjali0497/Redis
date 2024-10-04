@@ -24,10 +24,6 @@ resource "aws_instance" "Redis-public" {
     Name = "Redis-public"
   }
 }
-  tags = {
-    Name = "Redis-public"
-  }
-}
 
 # Private EC2 1 Instance
 resource "aws_instance" "Redis-private-1" {

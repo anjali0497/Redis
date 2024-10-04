@@ -2,7 +2,7 @@ variable "vpc_id" {
   type = string
 }
 
-variable "vpc-cidr" {
+variable "vpc_cidr" {
   type = string
 }
 

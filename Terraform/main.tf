@@ -13,7 +13,7 @@ module "vpc" {
 module "subnet" {
   source = "./subnets"
   vpc_id = module.vpc.vpc_id
-  vpc-cidr = module.vpc.vpc_cidr
+  vpc_cidr = module.vpc.vpc_cidr
 }
 
 module "security_groups" {
@@ -34,5 +34,5 @@ module "instance" {
 module "peering" {
   source = "./vpc-peering"
   vpc_id = module.vpc.vpc_id
-  vpc-cidr = module.vpc.vpc_cidr
+  vpc_cidr = module.vpc.vpc_cidr
 }

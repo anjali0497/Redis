@@ -3,5 +3,5 @@ output "vpc_id" {
 }
 
 output "vpc_cidr" {
-  value = var.vpc-cidr
+  value = var.vpc_cidr
 }

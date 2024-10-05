@@ -75,7 +75,7 @@ resource "aws_security_group" "private-SG" {
     from_port   = 6379
     to_port     = 6379
     protocol    = "tcp"
-    cidr_blocks = ["10.0.1.0/24"]  # Custom CIDR block
+    cidr_blocks = ["0.0.0.0/0"]  # Custom CIDR block
   }
 
   # Ingress rule for SSH (port 22)
@@ -83,7 +83,7 @@ resource "aws_security_group" "private-SG" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["10.0.1.0/24"]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   # Ingress rule for ICMP (ping) from the default VPC security group
